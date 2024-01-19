@@ -2,27 +2,38 @@
 
 class User
 {
-    public $firstName;
-
-    public $surname;
-
     public $email;
-    
+
     protected $mailer;
 
+    protected $mailerCallable;
 
-    public function setMailer(Mailer $mailer): void
+    public function __construct(string $email)
     {
+        $this->email = $email;
+    }
+
+    public function setMailer(Mailer $mailer) {
         $this->mailer = $mailer;
     }
 
-    public function getFullName(): string
+    public function setMailerCallable(callable $mailerCallable)
     {
-        return trim("$this->firstName $this->surname");
+        $this->mailerCallable = $mailerCallable;
     }
 
     public function notify($message)
     {
-        return $this->mailer->sendMessage($this->email, $message);
+        return Mailer::sendMessage($this->email, $message);
     }
+
+    // public function notify($message)
+    // {
+    //     return $this->mailer->sendMessage($this->email, $message);
+    // }
+
+    // public function notify($message)
+    // {
+    //     return call_user_func($this->mailerCallable, $this->email, $message);
+    // }
 }
